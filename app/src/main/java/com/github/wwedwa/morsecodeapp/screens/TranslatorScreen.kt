@@ -1,6 +1,6 @@
 package com.github.wwedwa.morsecodeapp.screens
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -9,32 +9,54 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.wwedwa.morsecodeapp.MorseCodeUtils
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButton
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.wwedwa.morsecodeapp.R
+import com.github.wwedwa.morsecodeapp.viewmodels.TranslatorViewModel
 
 @Composable
-fun TranslatorScreen() {
-    var inputText by rememberSaveable { mutableStateOf("") }
-    var morseText by remember { mutableStateOf("") }
+fun TranslatorScreen(viewModel: TranslatorViewModel = hiltViewModel()) {
     var play by remember { mutableStateOf(false)}
-    var currentSymbolIndex by rememberSaveable { mutableStateOf(-1) }
     val scrollState = rememberScrollState()
+
+    Log.d("translator screen", viewModel.inputText.value)
+    val inputText by viewModel.inputText
+    val currentSymbolIndex by viewModel.currentSymbolIndex
+
+    val onPlayPause = {
+        play = !play
+        // If at end of transmission, restart and play again
+        if (currentSymbolIndex >= MorseCodeUtils.textToMorse(inputText).length - 1) {
+            viewModel.setSymbolIndex(-1)
+            play = true
+        }
+        if (play) {
+            MorseCodeUtils.play(inputText, currentSymbolIndex + 1) { index ->
+                viewModel.setSymbolIndex(index)
+                // If at end, stop playing
+                if (index >= MorseCodeUtils.textToMorse(inputText).length - 1) {
+                    play = false
+                }
+            }
+        } else {
+            MorseCodeUtils.release()
+        }
+    }
+
+    val onStop = { MorseCodeUtils.release(); viewModel.setSymbolIndex(-1); viewModel.setInputText(""); play = false }
 
     Column(
         modifier = Modifier
@@ -49,71 +71,52 @@ fun TranslatorScreen() {
         OutlinedTextField(
             value = inputText,
             onValueChange = {
-                inputText = it
-                morseText = MorseCodeUtils.textToMorse(it)
+                onStop()
+                viewModel.setInputText(it)
             },
             label = { Text("Enter message") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            trailingIcon = {
+                if (inputText.isNotEmpty()) {
+                    IconButton(onClick = onPlayPause) {
+                        if (play) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.pause_icon),
+                                contentDescription = "Pause",
+                                tint = Color(0xff2a4174)
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Filled.PlayArrow,
+                                contentDescription = "Play",
+                                tint = Color(0xff2a4174)
+                            )
+                        }
+                    }
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        val onPlay = {
-            play = !play
-            // If at end of transmission, restart and play again
-            if (currentSymbolIndex >= MorseCodeUtils.textToMorse(inputText).length - 1) {
-                currentSymbolIndex = -1
-                play = true
-            }
-            if (play) {
-                MorseCodeUtils.play(inputText, currentSymbolIndex + 1) { index -> currentSymbolIndex = index }
-            } else {
-                MorseCodeUtils.release()
-            }
-        }
-
-        val onStop = { MorseCodeUtils.release(); currentSymbolIndex = -1; inputText = ""; morseText = ""}
-
-        ControlButtons(onPlay, onStop)
-        MorseDisplay(morseText, currentSymbolIndex)
-    }
-}
-
-@Composable
-fun ControlButtons(
-    onPlay: () -> Unit,
-    onCancel: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        IconButton(onClick = { onPlay() },
+        TextButton(
+            onClick = onStop,
             modifier = Modifier
-                .size(48.dp) // Set the size of the button
-                .background(MaterialTheme.colorScheme.primary, CircleShape)) {
-            Icon(
-                painter = painterResource(id = R.drawable.play_pause_icon),
-                contentDescription = "Play and Pause",
-                tint = Color.White,
-                modifier = Modifier.size(32.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(
+                text = "CLEAR",
+                fontSize = 18.sp
             )
         }
 
-        Spacer(modifier = Modifier.size(16.dp))
+        MorseDisplay(MorseCodeUtils.textToMorse(inputText), currentSymbolIndex)
+    }
 
-        IconButton(onClick = onCancel,
-                modifier = Modifier
-                .size(48.dp) // Set the size of the button
-                .background(MaterialTheme.colorScheme.primary, CircleShape)) {
-            Icon(
-                imageVector = Icons.Filled.Close,
-                contentDescription = "Cancel",
-                tint = Color.White,
-                modifier = Modifier.size(32.dp)
-            )
+    DisposableEffect(Unit) {
+        onDispose {
+            // If screen is disposed and morse code is playing, pause it
+            if (play) onPlayPause()
         }
     }
 }

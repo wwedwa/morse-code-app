@@ -12,10 +12,13 @@ import com.github.wwedwa.morsecodeapp.enums.BottomNavTab
 import com.github.wwedwa.morsecodeapp.enums.OutputType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.github.wwedwa.morsecodeapp.viewmodels.MainViewModel
+import com.github.wwedwa.morsecodeapp.viewmodels.SandboxViewModel
+import com.github.wwedwa.morsecodeapp.viewmodels.TranslatorViewModel
 
 @Composable
 fun BottomNavigationBar(
@@ -35,9 +38,12 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(
+    mainViewModel: MainViewModel,
+    sandboxViewModel: SandboxViewModel,
+    translatorViewModel: TranslatorViewModel) {
 
-    val selectedTab by viewModel.selectedTab
+    val selectedTab by mainViewModel.selectedTab
     val navController = rememberNavController()
 
     Scaffold(
@@ -45,7 +51,7 @@ fun MainScreen(viewModel: MainViewModel) {
             BottomNavigationBar(
                 selectedTab = selectedTab,
                 onTabSelected = { tab ->
-                    viewModel.setSelectedTab(tab)
+                    mainViewModel.setSelectedTab(tab)
                     when(tab) {
                         BottomNavTab.HOME -> { navController.navigate("sandbox") }
                         BottomNavTab.TRANSLATE -> { navController.navigate("translate") }
@@ -56,23 +62,9 @@ fun MainScreen(viewModel: MainViewModel) {
         }
     )  { paddingValues ->
         NavHost(navController, startDestination = "sandbox", Modifier.padding(paddingValues)) {
-            composable("sandbox") { SandboxScreen(viewModel) }
-            composable("translate") { TranslatorScreen() }
+            composable("sandbox") { SandboxScreen(sandboxViewModel) }
+            composable("translate") { TranslatorScreen(translatorViewModel) }
             composable("dictionary") { DictionaryScreen() }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewMainScreen() {
-    // Create a "fake" or test ViewModel
-    val previewViewModel = object : MainViewModel() {
-        init {
-            setOutput(OutputType.SPEAKER)
-            setSelectedTab(BottomNavTab.HOME)
-        }
-    }
-
-    MainScreen(previewViewModel)
 }

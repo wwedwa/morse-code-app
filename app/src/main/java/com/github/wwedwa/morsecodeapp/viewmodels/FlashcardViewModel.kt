@@ -18,6 +18,10 @@ class FlashcardViewModel @Inject constructor() : MorseCodeButtonViewModel() {
         _showSolution.value = !_showSolution.value
     }
 
+    fun hideSolution() {
+        _showSolution.value = false
+    }
+
     fun loadNextWord() {
         _currentWord.value = FlashcardData.words.random()
     }

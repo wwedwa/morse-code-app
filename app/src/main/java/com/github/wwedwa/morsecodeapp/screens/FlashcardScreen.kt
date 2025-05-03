@@ -84,7 +84,8 @@ fun FlashCardsScreen(viewModel: FlashcardViewModel = hiltViewModel()) {
                 )
             }
 
-            TextButton(onClick = { viewModel.loadNextWord(); viewModel.setMorseText("") }) {
+            // Delete text and hide solution before going to another card
+            TextButton(onClick = { viewModel.setMorseText(""); viewModel.hideSolution(); viewModel.loadNextWord() }) {
                 Text(
                     text = "Next",
                     fontSize = 18.sp

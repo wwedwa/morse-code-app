@@ -70,7 +70,7 @@ object MorseCodeUtils {
     fun playTone() {
         // Use another ToneGenerator so that it can be cancelled by the caller
         toneGen = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
-        toneGen?.startTone(ToneGenerator.TONE_DTMF_S, 5000) // 5 sec max, stop early
+        toneGen?.startTone(ToneGenerator.TONE_DTMF_S, 1000) // 5 sec max, stop early
     }
 
     fun play(text: String, position: Int = 0, onSymbolPlayed: (Int) -> Unit = {}) {

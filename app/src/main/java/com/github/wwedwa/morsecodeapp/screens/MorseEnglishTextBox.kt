@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -70,7 +69,6 @@ fun MorseEnglishTextBox(
     ) {
         Text(
             text = morseText,
-            style = MaterialTheme.typography.bodyLarge,
             fontSize = 20.sp
         )
 
@@ -78,7 +76,6 @@ fun MorseEnglishTextBox(
 
         Text(
             text = MorseCodeUtils.morseToText(morseText),
-            style = MaterialTheme.typography.bodyLarge,
             fontSize = 20.sp
         )
     }

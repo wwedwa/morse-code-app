@@ -9,13 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.wwedwa.morsecodeapp.enums.BottomNavTab
-import com.github.wwedwa.morsecodeapp.enums.OutputType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.*
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.github.wwedwa.morsecodeapp.viewmodels.FlashcardViewModel
 import com.github.wwedwa.morsecodeapp.viewmodels.MainViewModel
 import com.github.wwedwa.morsecodeapp.viewmodels.SandboxViewModel
 import com.github.wwedwa.morsecodeapp.viewmodels.TranslatorViewModel
@@ -41,7 +39,8 @@ fun BottomNavigationBar(
 fun MainScreen(
     mainViewModel: MainViewModel,
     sandboxViewModel: SandboxViewModel,
-    translatorViewModel: TranslatorViewModel) {
+    translatorViewModel: TranslatorViewModel,
+    flashCardViewModel: FlashcardViewModel) {
 
     val selectedTab by mainViewModel.selectedTab
     val navController = rememberNavController()
@@ -56,6 +55,7 @@ fun MainScreen(
                         BottomNavTab.HOME -> { navController.navigate("sandbox") }
                         BottomNavTab.TRANSLATE -> { navController.navigate("translate") }
                         BottomNavTab.DICTIONARY -> { navController.navigate("dictionary") }
+                        BottomNavTab.LEARN -> { navController.navigate("learn") }
                     }
                 }
             )
@@ -65,6 +65,7 @@ fun MainScreen(
             composable("sandbox") { SandboxScreen(sandboxViewModel) }
             composable("translate") { TranslatorScreen(translatorViewModel) }
             composable("dictionary") { DictionaryScreen() }
+            composable("learn") { FlashCardsScreen(flashCardViewModel) }
         }
     }
 }

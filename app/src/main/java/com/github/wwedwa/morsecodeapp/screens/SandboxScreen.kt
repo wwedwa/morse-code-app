@@ -29,7 +29,6 @@ import com.github.wwedwa.morsecodeapp.viewmodels.SandboxViewModel
 fun SandboxScreen(viewModel: SandboxViewModel = hiltViewModel()) {
 
     val outputType by viewModel.outputType
-    val morseText by viewModel.morseText
 
     val context = LocalContext.current
 

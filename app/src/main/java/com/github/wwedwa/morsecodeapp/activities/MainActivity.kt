@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.wwedwa.morsecodeapp.screens.MainScreen
 import com.github.wwedwa.morsecodeapp.ui.theme.MorseCodeAppTheme
+import com.github.wwedwa.morsecodeapp.viewmodels.FlashcardViewModel
 import com.github.wwedwa.morsecodeapp.viewmodels.MainViewModel
 import com.github.wwedwa.morsecodeapp.viewmodels.SandboxViewModel
 import com.github.wwedwa.morsecodeapp.viewmodels.TranslatorViewModel
@@ -22,8 +23,9 @@ class MainActivity : ComponentActivity() {
             val mainViewModel: MainViewModel = viewModel()
             val sandboxViewModel: SandboxViewModel = hiltViewModel()
             val translatorViewModel: TranslatorViewModel = hiltViewModel()
+            val flashCardViewModel: FlashcardViewModel = hiltViewModel()
             MorseCodeAppTheme {
-                MainScreen(mainViewModel, sandboxViewModel, translatorViewModel)
+                MainScreen(mainViewModel, sandboxViewModel, translatorViewModel, flashCardViewModel)
             }
         }
     }

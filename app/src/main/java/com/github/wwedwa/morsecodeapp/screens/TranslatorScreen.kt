@@ -56,6 +56,7 @@ fun TranslatorScreen(viewModel: TranslatorViewModel = hiltViewModel()) {
         }
     }
 
+    // Reset everything when cancel is selected
     val onStop = { MorseCodeUtils.release(); viewModel.setSymbolIndex(-1); viewModel.setInputText(""); play = false }
 
     Column(
@@ -125,6 +126,7 @@ fun TranslatorScreen(viewModel: TranslatorViewModel = hiltViewModel()) {
 fun MorseDisplay(morseCode: String, currentIndex: Int) {
     val styledText = buildAnnotatedString {
         morseCode.forEachIndexed { index, char ->
+            // Highlight current symbol red so user can follow along
             withStyle(
                 style = if (index == currentIndex)
                     SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)

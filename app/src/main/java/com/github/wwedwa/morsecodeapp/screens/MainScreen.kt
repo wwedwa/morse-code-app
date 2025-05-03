@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.wwedwa.morsecodeapp.enums.BottomNavTab
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -37,10 +38,10 @@ fun BottomNavigationBar(
 
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel,
-    sandboxViewModel: SandboxViewModel,
-    translatorViewModel: TranslatorViewModel,
-    flashCardViewModel: FlashcardViewModel) {
+    mainViewModel: MainViewModel = hiltViewModel(),
+    sandboxViewModel: SandboxViewModel = hiltViewModel(),
+    translatorViewModel: TranslatorViewModel = hiltViewModel(),
+    flashCardViewModel: FlashcardViewModel = hiltViewModel()) {
 
     val selectedTab by mainViewModel.selectedTab
     val navController = rememberNavController()

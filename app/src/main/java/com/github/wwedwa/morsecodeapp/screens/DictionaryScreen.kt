@@ -23,6 +23,7 @@ fun DictionaryScreen() {
             style = MaterialTheme.typography.headlineSmall
         )
 
+        // Row of alphanumeric characters. when clicked they will play their noise
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             items(MorseCodeUtils.letterToMorse.toList()) { entry ->
                 Column {

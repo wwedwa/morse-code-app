@@ -1,21 +1,14 @@
 package com.github.wwedwa.morsecodeapp.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.github.wwedwa.morsecodeapp.enums.OutputType
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
-import com.github.wwedwa.morsecodeapp.MorseCodeUtils
 import com.github.wwedwa.morsecodeapp.viewmodels.MorseCodeButtonViewModel
 
 @Composable
@@ -42,9 +35,7 @@ fun MorseCodeButton(
                             viewModel.setMorseText("$morseText / ")
                         } else if (!onBackspace && morseText.isNotEmpty() && pauseDuration >= 300) {
                             viewModel.setMorseText("$morseText ")
-                        } //.... . .-.. .-.. --- /
-                        // -- -.-- / -. .- -- . /
-                        // .. ... / .-- .. .-.. .-.. .. .- --
+                        }
 
                         viewModel.setOnBackspace(false)
                         onPress()
@@ -59,11 +50,9 @@ fun MorseCodeButton(
                         val duration = endTime - startTime
                         if (duration < 300) {
                             // It's a dot
-                            // Handle dot logic here
                             viewModel.setMorseText("$morseText.")
                         } else {
                             // It's a dash
-                            // Handle dash logic here
                             viewModel.setMorseText("$morseText-")
                         }
                     }

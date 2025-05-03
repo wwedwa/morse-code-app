@@ -43,6 +43,8 @@ fun SandboxScreen(viewModel: SandboxViewModel = hiltViewModel()) {
         )
         Spacer(modifier = Modifier.height(100.dp))
 
+        // onPress and onRelease functions to handle what happens when
+        // the morse code button is interacted with (allows speaker and flashlight)
         val onPress = {
             if (outputType == OutputType.FLASHLIGHT) {
                 MorseCodeUtils.toggleFlashlight(context, true)
@@ -69,6 +71,7 @@ fun SandboxScreen(viewModel: SandboxViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Switch for allowing user of speakers and flashlight
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.align(Alignment.CenterHorizontally)

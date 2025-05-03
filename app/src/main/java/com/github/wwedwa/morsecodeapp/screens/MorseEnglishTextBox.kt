@@ -29,6 +29,7 @@ fun MorseEnglishTextBox(
 
     val morseText by viewModel.morseText
 
+    // Row containing buttons for clearing text and deleting last letter
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = buttonsModifier
@@ -64,6 +65,7 @@ fun MorseEnglishTextBox(
 
     Spacer(modifier = Modifier.height(64.dp))
 
+    // Contains Text objects for displaying English and Morse code text
     Column(
         modifier = textModifier
     ) {

@@ -45,6 +45,7 @@ fun FlashCardsScreen(viewModel: FlashcardViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Flashcard showing word and optional morse code translation
         Card(
             modifier = Modifier
                 .fillMaxWidth()

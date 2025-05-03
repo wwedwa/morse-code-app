@@ -84,13 +84,13 @@ fun TranslatorScreen(viewModel: TranslatorViewModel = hiltViewModel()) {
                             Icon(
                                 painter = painterResource(id = R.drawable.pause_icon),
                                 contentDescription = "Pause",
-                                tint = Color(0xff2a4174)
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         } else {
                             Icon(
                                 imageVector = Icons.Filled.PlayArrow,
                                 contentDescription = "Play",
-                                tint = Color(0xff2a4174)
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
@@ -131,7 +131,7 @@ fun MorseDisplay(morseCode: String, currentIndex: Int) {
                 style = if (index == currentIndex)
                     SpanStyle(color = Color.Red, fontWeight = FontWeight.Bold)
                 else
-                    SpanStyle(color = Color.Black)
+                    SpanStyle()
             ) {
                 append(char)
             }

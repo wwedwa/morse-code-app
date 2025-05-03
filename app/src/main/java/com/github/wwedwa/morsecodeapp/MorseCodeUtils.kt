@@ -68,7 +68,6 @@ object MorseCodeUtils {
 
     // Speaker tone logic
     fun playTone() {
-        // Use another ToneGenerator so that it can be cancelled by the caller
         toneGen = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
         toneGen?.startTone(ToneGenerator.TONE_DTMF_S, 1000) // 1 sec max, stop early
     }
